@@ -27,3 +27,4 @@ final class GradientView: UIView {
         layer.locations = [0, 1]
     }
 }
+
