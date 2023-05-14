@@ -123,4 +123,3 @@ final class ProfileViewController: UIViewController {
         descriptionLabel.text = nil
     }
 }
-
