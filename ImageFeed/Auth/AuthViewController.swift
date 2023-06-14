@@ -1,4 +1,7 @@
+
+
 import UIKit
+import ProgressHUD
 
 final class AuthViewController: UIViewController {
     
@@ -9,7 +12,15 @@ final class AuthViewController: UIViewController {
     private let oauth2Service = OAuth2Service.shared
     private let oauth2TokenStorage = OAuth2TokenStorage.shared
     
+    private var alertPresenter: AlertPresenterProtocol?
     weak var delegate: AuthViewControllerDelegate?
+    
+    // MARK: - Lifecycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        alertPresenter = AlertPresenter(viewController: self)
+    }
     
     // MARK: - Segue methods
     
@@ -31,23 +42,28 @@ extension AuthViewController: WebViewViewControllerDelegate {
     // MARK: - Delegate methods
     
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
+        UIBlockingProgressHUD.show()
+        webViewViewControllerDidCancel(vc)
+        
         oauth2Service.fetchAuthToken(code) { [weak self] result in
             guard let self else { return }
+            UIBlockingProgressHUD.dismiss()
+            
             switch result {
             case .success(let token):
                 self.oauth2TokenStorage.token = token
                 self.delegate?.authViewController(self, didAuthenticateWithCode: code)
             case .failure(let error):
                 let alert = AlertModel(
-                    title: "Ошибка сети",
+                    title: "Что-то пошло не так :(",
                     message: error.localizedDescription,
-                    buttonText: "Попробовать ещё раз"
+                    buttonText: "Ок"
                 ) { [ weak self] in
                     guard let self else { return }
                     self.webViewViewController(vc, didAuthenticateWithCode: code)
                 }
                 
-                AlertPresenter(viewController: vc).showAlert(model: alert)
+                alertPresenter?.showAlert(model: alert)
             }
         }
     }
