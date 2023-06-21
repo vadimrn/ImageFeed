@@ -2,7 +2,7 @@
 //  URLRequest+Extensions.swift
 //  ImageFeed
 //
-//  Created by Vadim Nuretdinov on 13.05.2023.
+//  Created by Vadim Nuretdinov on 21.06.2023.
 //
 
 import Foundation
