@@ -1,68 +1,45 @@
-//
-//  OAuth2Service.swift
-//  ImageFeed
-//
-//  Created by Vadim Nuretdinov on 21.06.2023.
-//
+import UIKit
 
-import Foundation
-
-final class OAuth2Service: OAuth2ServiceProtocol {
-    
-    static let shared = OAuth2Service()
-    
-    private let session = URLSession.shared
+final class OAuth2Service {
     private var task: URLSessionTask?
     private var lastCode: String?
     
-    func fetchAuthToken(
-        _ code: String,
-        completion: @escaping (Result<String, Error>) -> Void
-    ) {
+    func fetchAuthToken(_ code: String, completion: @escaping (Result<OAuthTokenResponseBody, Error>) -> Void) {
         assert(Thread.isMainThread)
         if lastCode == code { return }
         task?.cancel()
         lastCode = code
         
-        guard let request = oauth2Request(code) else { return }
+        let request = makeRequest(code: code)
         
-        let task = session.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
-            guard let self else { return }
-            
+        let session = URLSession.shared
+        let task = session.objectTask(for: request) { (result: Result<OAuthTokenResponseBody, Error>) in
             switch result {
-            case .success(let body):
-                completion(.success(body.accessToken))
+            case .success(let responseBody):
+                completion(.success(responseBody))
+                self.task = nil
             case .failure(let error):
                 completion(.failure(error))
                 self.lastCode = nil
             }
-            self.task = nil
         }
         self.task = task
+        task.resume()
     }
-}
-
-private extension OAuth2Service {
-    func oauth2Request(_ code: String) -> URLRequest? {
-        
-        guard var urlComponents = URLComponents(string: Constants.unsplashTokenURL) else {
-            assertionFailure("Failed to get URL from String")
-            return nil
-        }
-        
+    
+    private func makeRequest(code: String) -> URLRequest {
+        var urlComponents = URLComponents()
+        urlComponents.scheme = "https"
+        urlComponents.host = "unsplash.com"
+        urlComponents.path = "/oauth/token"
         urlComponents.queryItems = [
-            URLQueryItem(name: "client_id", value: Constants.accessKey),
-            URLQueryItem(name: "client_secret", value: Constants.secretKey),
-            URLQueryItem(name: "redirect_uri", value: Constants.redirectURI),
-            URLQueryItem(name: "code", value: code),
-            URLQueryItem(name: "grant_type", value: "authorization_code")
+            .init(name: "client_id", value: DecodingInfo.API.accessKey),
+            .init(name: "client_secret", value: DecodingInfo.API.secretKey),
+            .init(name: "redirect_uri", value: DecodingInfo.API.redirectURI),
+            .init(name: "code", value: code),
+            .init(name: "grant_type", value: "authorization_code")
         ]
-        
-        guard let url = urlComponents.url else {
-            assertionFailure("Failed to create URL")
-            return nil
-        }
-        
+        guard let url = urlComponents.url else { fatalError("Failed to create URL") }
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         return request
