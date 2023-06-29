@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  ImageFeed
 //
-//  Created by Vadim Nuretdinov on 26.06.2023.
+//  Created by Vadim Nuretdinov on 20.06.2023.
 //
 
 import UIKit
