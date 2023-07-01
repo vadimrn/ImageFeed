@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2785EFF22A4E191E000125E7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9128919D29A3BE3B001659FC /* SceneDelegate.swift */; };
-		2785EFF32A4E191F000125E7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9128919D29A3BE3B001659FC /* SceneDelegate.swift */; };
 		9125876829D9944400313BFC /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9125876729D9944400313BFC /* Constants.swift */; };
 		9125876A29D9ACF900313BFC /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9125876929D9ACF900313BFC /* AuthViewController.swift */; };
 		9125876D29D9AE9500313BFC /* WebViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9125876C29D9AE9500313BFC /* WebViewViewController.swift */; };
@@ -587,7 +585,6 @@
 				9160CD042A389EE7001493E7 /* WebViewViewControllerSpy.swift in Sources */,
 				9160CD082A389F2A001493E7 /* ProfileViewTests.swift in Sources */,
 				9160CD022A389EC9001493E7 /* WebViewPresenterSpy.swift in Sources */,
-				2785EFF22A4E191E000125E7 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -597,7 +594,6 @@
 			files = (
 				9160CD122A38A15D001493E7 /* ImageFeedUITestsLaunchTests.swift in Sources */,
 				9160CD102A38A15D001493E7 /* ImageFeedUITests.swift in Sources */,
-				2785EFF32A4E191F000125E7 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
