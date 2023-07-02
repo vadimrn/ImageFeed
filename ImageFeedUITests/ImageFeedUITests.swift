@@ -21,7 +21,6 @@ final class ImageFeedUITests: XCTestCase {
         
         loginTextField.tap()
         loginTextField.typeText("Vadimnuretdin@yandex.ru")
-        webView.swipeUp()
         app.toolbars["Toolbar"].buttons["Done"].tap()
         
         let passwordTextField = webView.descendants(matching: .secureTextField).element
@@ -29,7 +28,6 @@ final class ImageFeedUITests: XCTestCase {
         
         passwordTextField.tap()
         passwordTextField.typeText("Zarinka1992")
-        webView.swipeUp()
         app.toolbars["Toolbar"].buttons["Done"].tap()
         
         webView.buttons["Login"].tap()
@@ -68,10 +66,12 @@ final class ImageFeedUITests: XCTestCase {
         app.tabBars.buttons.element(boundBy: 1).tap()
         
         XCTAssertTrue(app.staticTexts["vadim nur"].exists)
-        XCTAssertTrue(app.staticTexts["@vadimnuretdin"].exists)
+        XCTAssertTrue(app.staticTexts["vadinur"].exists)
         
         app.buttons["logoutButton"].tap()
         
         app.alerts["Пока, пока!"].scrollViews.otherElements.buttons["Yes"].tap()
+        
+        XCTAssertTrue(app.buttons["Authenticate"].waitForExistence(timeout: 5))
     }
 }
